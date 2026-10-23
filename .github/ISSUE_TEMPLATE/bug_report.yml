@@ -1,0 +1,32 @@
+name: Something isn't working
+description: The keyboard isn't detected, or keys misbehave
+labels: [bug]
+body:
+  - type: dropdown
+    id: connection
+    attributes:
+      label: Connection
+      options:
+        - USB cable
+        - 2.4G dongle
+        - Bluetooth
+    validations:
+      required: true
+  - type: input
+    id: signalrgb
+    attributes:
+      label: SignalRGB version
+      placeholder: e.g. 2.5.80
+  - type: textarea
+    id: what
+    attributes:
+      label: What happens?
+      description: What did you expect, and what happened instead? Screenshots or photos help.
+    validations:
+      required: true
+  - type: input
+    id: hwid
+    attributes:
+      label: Hardware ID (if not detected)
+      description: Device Manager → your keyboard → Properties → Details → Hardware Ids. Copy the line with VID_ and PID_.
+      placeholder: e.g. USB\VID_320F&PID_511B

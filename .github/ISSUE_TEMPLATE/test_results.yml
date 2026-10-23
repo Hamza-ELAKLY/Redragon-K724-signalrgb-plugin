@@ -1,0 +1,50 @@
+name: Test results
+description: Share how the K724 plugin looks on your keyboard
+labels: [test results]
+body:
+  - type: dropdown
+    id: model
+    attributes:
+      label: Keyboard version
+      description: The model is printed on the sticker under the keyboard.
+      options:
+        - K724-RGB-PRO (Black)
+        - K724GBG-RGB-PRO
+        - K724SP-RGB-PRO
+        - Other / not sure
+    validations:
+      required: true
+  - type: dropdown
+    id: rows16
+    attributes:
+      label: "Rows test: 16"
+      description: Does each row of keys show one solid color?
+      options:
+        - Yes, every row is one color
+        - Mostly, a few keys are off
+        - No, rows are mixed
+    validations:
+      required: true
+  - type: dropdown
+    id: effect
+    attributes:
+      label: Effects with "Rows of 16"
+      description: With Test mode Off, does an effect like Side to Side line up with the keys?
+      options:
+        - Yes, it lines up
+        - Mostly, a few keys are off
+        - No
+  - type: textarea
+    id: single
+    attributes:
+      label: Single LED results (if you did it)
+      description: Which key lights up for each Single LED slot number.
+      placeholder: |
+        80 = Left Ctrl
+        81 = Win
+        ...
+  - type: textarea
+    id: notes
+    attributes:
+      label: Photos or anything else
+      description: Drag photos or a short video here.
