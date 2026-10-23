@@ -55,7 +55,7 @@ const vLedPositions = [
 	[0, 5], [1, 5], [2, 5],                         [6, 5],                 [9, 5], [10, 5], [11, 5], [12, 5], [13, 5], [14, 5],
 ];
 
-// LED index per key. The K724 uses 16 slots per row; the bottom row is still being confirmed.
+// LED index per key. The K724 uses 16 slots per row, confirmed on a K724 Pro.
 // The K708 Pro map (15 slots) and the K724 driver's numbering (21 slots) are kept for comparison.
 const ledMaps = {
 	"Rows of 16 (K724)": [
