@@ -12,7 +12,7 @@ export function Publisher() { return "Hamza-ELAKLY (based on WhirlwindFx & Nuonu
 export function Size() { return [15, 6]; }
 export function DeviceType() { return "keyboard"; }
 export function Validate(endpoint) { return endpoint.interface === 1; }
-export function ImageUrl() { return "https://assets.signalrgb.com/devices/brands/redragon/keyboards/k580.png"; }
+export function ImageUrl() { return "https://cdn.shopify.com/s/files/1/0012/4957/4961/files/RedragonBEHEMOTHK724PRO81KeysOEMProfileGasketRGBGamingKeyboard_1_edc3b12b-33b3-4ffb-ad92-4cbb6fbbbe0f.png?v=1762466707&width=512"; }
 /* global
 shutdownColor:readonly
 LightingMode:readonly
@@ -41,8 +41,8 @@ const vLedNames = [
 	"Esc", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12",
 	"`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-_", "=+", "Backspace", "Insert",
 	"Tab", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "[", "]", "\\", "Del",
-	"CapsLock", "A", "S", "D", "F", "G", "H", "J", "K", "L", ";", "'", "Enter", "PgUp",
-	"Left Shift", "Z", "X", "C", "V", "B", "N", "M", ",", ".", "/", "Right Shift", "Up Arrow", "PgDn",
+	"CapsLock", "A", "S", "D", "F", "G", "H", "J", "K", "L", ";", "'", "Enter", "PgDn",
+	"Left Shift", "Z", "X", "C", "V", "B", "N", "M", ",", ".", "/", "Right Shift", "Up Arrow", "PgUp",
 	"Left Ctrl", "Left Win", "Left Alt", "Space", "Right Alt", "Fn", "Right Ctrl", "Left Arrow", "Down Arrow", "Right Arrow",
 ];
 
@@ -109,7 +109,7 @@ export function Shutdown(SystemSuspending) {
 
 function sendColors(overrideColor) {
 	const vLeds = ledMaps[ledMap] ?? ledMaps["Rows of 16 (K724)"];
-	const RGBData = new Array((Math.max(...vLeds) + 1) * 3).fill(0);
+	const RGBData = new Array(Math.max(Math.max(...vLeds) + 1, 96) * 3).fill(0);
 
 	for (let iIdx = 0; iIdx < vLeds.length; iIdx++) {
 		let color;
@@ -125,6 +125,33 @@ function sendColors(overrideColor) {
 		RGBData[vLeds[iIdx] * 3]     = color[0];
 		RGBData[vLeds[iIdx] * 3 + 1] = color[1];
 		RGBData[vLeds[iIdx] * 3 + 2] = color[2];
+	}
+
+	// Bottom row: on the K724 the space bar and right Alt don't sit on the slots above, so
+	// fill every bottom-row slot (80 + column) with the color at that column. Slots with no
+	// LED just ignore it.
+	if (vLeds === ledMaps["Rows of 16 (K724)"]) {
+		for (let iCol = 0; iCol < 16; iCol++) {
+			const iSlot = 80 + iCol;
+
+			if (vLeds.includes(iSlot)) {
+				continue;
+			}
+
+			let color;
+
+			if (overrideColor) {
+				color = hexToRgb(overrideColor);
+			} else if (LightingMode === "Forced") {
+				color = hexToRgb(forcedColor);
+			} else {
+				color = device.color(Math.min(iCol, 14), 5);
+			}
+
+			RGBData[iSlot * 3]     = color[0];
+			RGBData[iSlot * 3 + 1] = color[1];
+			RGBData[iSlot * 3 + 2] = color[2];
+		}
 	}
 
 	writeRGBPackage(RGBData);
